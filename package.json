@@ -1,0 +1,72 @@
+{
+  "name": "react-native-rectangle-scanner",
+  "version": "1.0.10",
+  "description": "Scan documents, automatic border detection, automatic crop, image filters",
+  "main": "index.js",
+  "files": [
+    "/android",
+    "!/android/build",
+    "/ios",
+    "/src",
+    "/*.podspec",
+    "react-native.config.js"
+  ],
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-component",
+    "react-native-scanner",
+    "react-native-document-scanner",
+    "scanner",
+    "document",
+    "ios",
+    "android",
+    "camera"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HarvestProfit/react-native-rectangle-scanner"
+  },
+  "author": "Jake Humphrey (https://github.com/humphreyja)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HarvestProfit/react-native-rectangle-scanner/issues"
+  },
+  "homepage": "https://github.com/HarvestProfit/react-native-rectangle-scanner#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-inline-import": "^3.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "prop-types": "^15.7.2",
+    "react": "16.8.3",
+    "react-dom": "16.8.3",
+    "react-native": "~0.59.8",
+    "react-native-svg": "^10.0.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-svg": "*"
+  },
+  "jest": {
+    "preset": "react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/lib/"
+    ]
+  }
+}
