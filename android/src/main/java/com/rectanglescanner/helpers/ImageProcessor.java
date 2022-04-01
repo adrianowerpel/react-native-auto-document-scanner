@@ -160,14 +160,14 @@ public class ImageProcessor extends Handler {
             Point[] points = approx.toArray();
 
             // select biggest 4 angles polygon
-            // if (points.length == 4) {
-            Point[] foundPoints = sortPoints(points);
+            if (points.length == 4) {
+              Point[] foundPoints = sortPoints(points);
 
-            if (insideArea(foundPoints, size)) {
+              if (insideArea(foundPoints, size)) {
 
-                return new Quadrilateral(c, foundPoints, new Size(srcSize.width, srcSize.height));
+                  return new Quadrilateral(c, foundPoints, new Size(srcSize.width, srcSize.height));
+              }
             }
-            // }
         }
 
         return null;
