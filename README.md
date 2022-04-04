@@ -65,29 +65,115 @@ This is the most barebones usage of this. It will show a fullscreen camera previ
 
 
 ```javascript
-import React, { Component, useRef } from "react"
-import { View, Image } from "react-native"
+import React, { Component, useRef, useState } from "react"
+import { View, Image, Dimensions } from "react-native"
 
 import Scanner from "react-native-auto-document-scanner"
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGTH = Dimensions.get('window').height;
+
 class DocumentScanner extends Component {
+
+  const [detectedRectangle, setDetectedRectangle] = useState(false);
+  const [camera, setCamera] = useState(React.createRef());
+  const [takingPicture, setTakingPicture] = useState(false);
+  const [processingImage, setProcessingImage] = useState(false);
 
   handleOnPictureProcessed = ({croppedImage, initialImage}) => {
     this.props.doSomethingWithCroppedImagePath(croppedImage);
     this.props.doSomethingWithOriginalImagePath(initialImage);
   }
 
-  onCapture = () => {
-    this.camera.current.capture();
+  const onDeviceSetup = (deviceDetails) => {
+    const {
+      hasCamera, permissionToUseCamera, flashIsAvailable, previewHeightPercent, previewWidthPercent,
+    } = deviceDetails;
+    setLoadingCamera(false)
+    setDevice({
+      initialized: true,
+      hasCamera,
+      permissionToUseCamera,
+      flashIsAvailable,
+      previewHeightPercent: previewHeightPercent || 1,
+      previewWidthPercent: previewWidthPercent || 1,
+    })
+  }
+
+  capture = () => {
+    camera.current.capture();
+  }
+
+  // The picture was captured but still needs to be processed.
+  function onPictureTaken(event) {
+    setTakingPicture(false);
+  };
+
+  // The picture was taken and cached. You can now go on to using it.
+  function onPictureProcessed(event) {
+    setImage(event)
+    setTakingPicture(false)
+    setProcessingImage(false)
+  }
+
+  function getPreviewSizeOverlay() {
+    const dimensions = Dimensions.get('window');
+    // We use set margin amounts because for some reasons the percentage values don't align the camera preview in the center correctly.
+    const heightMargin = (1 - device.previewHeightPercent) * dimensions.height / 2;
+    const widthMargin = (1 - device.previewWidthPercent) * dimensions.width / 2;
+    if (dimensions.height > dimensions.width) {
+      // Portrait
+      return {
+        height: SCREEN_HEIGTH * 0.00133,
+        width: device.previewWidthPercent,
+        marginTop: heightMargin,
+        marginLeft: widthMargin,
+      };
+    }
+    // Landscape
+    return {
+      width: SCREEN_HEIGTH * 0.00133,
+      height: device.previewWidthPercent,
+      marginTop: widthMargin,
+      marginLeft: heightMargin,
+    };
   }
 
   render() {
+
+    const previewSizeOverlay = getPreviewSizeOverlay();
+
+    let rectangleOverlay = (
+          <RectangleOverlay
+            detectionCountBeforeCapture={2}
+            detectedRectangle={detectedRectangle}
+            backgroundColor="rgba(255,181,6, 0.2)"
+            borderColor="rgb(255,181,6)"
+            borderWidth={4}
+            detectedBackgroundColor="rgba(255,181,6, 0.3)"
+            detectedBorderWidth={6}
+            detectedBorderColor="rgb(255,218,124)"
+            onDetectedCapture={capture}
+            allowDetection
+            previewRatio={previewSizeOverlay}
+          />
+        );
+
     return (
-      <Scanner
-        onPictureProcessed={this.handleOnPictureProcessed}
-        ref={this.camera}
-        style={{flex: 1}}
-      />
+      <View style={{flex: 1}}>
+        <Scanner
+            onPictureTaken={onPictureTaken}
+            onPictureProcessed={onPictureProcessed}
+            enableTorch={flashEnabled}
+            ref={camera}
+            capturedQuality={0.6}
+            onRectangleDetected={({ detectedRectangle }) => setDetectedRectangle(detectedRectangle)}
+            onDeviceSetup={onDeviceSetup}
+            style={{flex: 1}}
+            onErrorProcessingImage={(err) => console.log('error', err)}
+          />
+          {rectangleOverlay}
+      </View>
     );
   }
 }
@@ -99,7 +185,7 @@ Above is a very barebones version of the scanner. Check out a full example in [e
 
 This package works on a simulator. Android has a pretty cool VR world that emulates a camera. On iOS the preview will just be a black screen, and the `onDeviceSetup` property will return false for the `hasCamera` attribute so you can show a custom message like "This device doesnt have a camera".
 
-## Properties
+## Scanner Properties
 
 | Prop                        | Default |   Type    | Description                                                |
 | :-------------------------- | :-----: | :-------: | :--------------------------------------------------------- |
@@ -114,6 +200,14 @@ This package works on a simulator. Android has a pretty cool VR world that emula
 | onErrorProcessingImage      | `null`  | `func`    | Called if there was an error capturing the image. Includes a `message` and the paths it was trying to save if the error was failing to save the image. |
 | onDeviceSetup               | `null`  | `func`    | Called after the system sets up the camera allowing you to configure the view for different device setups. |
 | androidPermission           | `null`  | `object or false`  | ANDROID ONLY: Allows specifying the permission object on android or disabling entirely (pass `false`). |
+
+
+## Rectangle Properties
+
+| Prop                        | Default |   Type    | Description                                                |
+| :-------------------------- | :-----: | :-------: | :--------------------------------------------------------- |
+| detectionCountBeforeCapture |   `8`   | `integer` | Seconds to auto capture imagem after detected by rectangle |
+| backgroundColor             | `false` |  `bool`   | Color of detected rectangle                                |
 
 
 ### onDeviceSetup
