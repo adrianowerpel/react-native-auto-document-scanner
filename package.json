@@ -1,6 +1,6 @@
 {
-  "name": "react-native-rectangle-scanner",
-  "version": "1.0.10",
+  "name": "react-native-auto-document-scanner",
+  "version": "0.0.1",
   "description": "Scan documents, automatic border detection, automatic crop, image filters",
   "main": "index.js",
   "files": [
@@ -31,14 +31,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/HarvestProfit/react-native-rectangle-scanner"
+    "url": "git+https://github.com/adrianowerpel/react-native-auto-document-scanner.git"
   },
-  "author": "Jake Humphrey (https://github.com/humphreyja)",
+  "author": "Jake Humphrey (https://github.com/adrianowerpel)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/HarvestProfit/react-native-rectangle-scanner/issues"
+    "url": "https://github.com/adrianowerpel/react-native-auto-document-scanner/issues"
   },
-  "homepage": "https://github.com/HarvestProfit/react-native-rectangle-scanner#readme",
+  "homepage": "https://github.com/adrianowerpel/react-native-auto-document-scanner#readme",
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
@@ -68,5 +68,8 @@
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ]
+  },
+  "directories": {
+    "example": "example"
   }
 }
