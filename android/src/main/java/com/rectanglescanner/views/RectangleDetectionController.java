@@ -31,7 +31,7 @@ import org.opencv.core.Mat;
 public class RectangleDetectionController extends CameraDeviceController {
     private HandlerThread mImageThread;
     private ImageProcessor mImageProcessor;
-    private int numberOfRectangles = 15;
+    private int numberOfRectangles = 10;
     private boolean imageProcessorBusy = true;
     private int filterId = 1;
 
@@ -120,7 +120,7 @@ public class RectangleDetectionController extends CameraDeviceController {
           setImageProcessorBusy(true);
           Message msg = mImageProcessor.obtainMessage();
           msg.obj = new ImageProcessorMessage("previewFrame", image);
-          mImageProcessor.sendMessageDelayed(msg, 100);
+          mImageProcessor.sendMessageDelayed(msg, 500);
       }
     }
 
